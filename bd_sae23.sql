@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : mer. 08 juin 2022 à 11:46
+-- Généré le : jeu. 09 juin 2022 à 11:09
 -- Version du serveur : 10.4.24-MariaDB
 -- Version de PHP : 8.1.6
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données : `bd_saé23`
+-- Base de données : `sae23`
 --
 
 -- --------------------------------------------------------
@@ -41,9 +41,9 @@ CREATE TABLE `administration` (
 
 CREATE TABLE `batiment` (
   `id_bat` int(11) NOT NULL,
-  `salle` text NOT NULL,
-  `etage` text NOT NULL,
-  `admin` int(15) NOT NULL
+  `Nom` text NOT NULL,
+  `login` text NOT NULL,
+  `mdp` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -55,8 +55,9 @@ CREATE TABLE `batiment` (
 CREATE TABLE `capteur` (
   `id_capteur` int(11) NOT NULL,
   `salle` text NOT NULL,
-  `etage` int(11) NOT NULL,
-  `admin` int(11) NOT NULL
+  `Nom` text NOT NULL,
+  `type` text NOT NULL,
+  `batiment` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -69,7 +70,7 @@ CREATE TABLE `mesure` (
   `id_mesure` int(11) NOT NULL,
   `date/heure` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `id_capteur` int(11) NOT NULL,
-  `admin` int(11) NOT NULL
+  `valeur` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -86,22 +87,21 @@ ALTER TABLE `administration`
 -- Index pour la table `batiment`
 --
 ALTER TABLE `batiment`
-  ADD PRIMARY KEY (`id_bat`),
-  ADD KEY `privilèges` (`admin`);
+  ADD PRIMARY KEY (`id_bat`);
 
 --
 -- Index pour la table `capteur`
 --
 ALTER TABLE `capteur`
-  ADD PRIMARY KEY (`id_capteur`);
+  ADD PRIMARY KEY (`id_capteur`),
+  ADD KEY `id_bat` (`batiment`);
 
 --
 -- Index pour la table `mesure`
 --
 ALTER TABLE `mesure`
   ADD PRIMARY KEY (`id_mesure`),
-  ADD KEY `capteur->données` (`id_capteur`),
-  ADD KEY `user` (`admin`);
+  ADD KEY `capteur->données` (`id_capteur`);
 
 --
 -- AUTO_INCREMENT pour les tables déchargées
@@ -136,17 +136,16 @@ ALTER TABLE `mesure`
 --
 
 --
--- Contraintes pour la table `batiment`
+-- Contraintes pour la table `capteur`
 --
-ALTER TABLE `batiment`
-  ADD CONSTRAINT `privilèges` FOREIGN KEY (`admin`) REFERENCES `administration` (`id_admin`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `capteur`
+  ADD CONSTRAINT `id_bat` FOREIGN KEY (`batiment`) REFERENCES `batiment` (`id_bat`);
 
 --
 -- Contraintes pour la table `mesure`
 --
 ALTER TABLE `mesure`
-  ADD CONSTRAINT `capteur->données` FOREIGN KEY (`id_capteur`) REFERENCES `capteur` (`id_capteur`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `user` FOREIGN KEY (`admin`) REFERENCES `administration` (`id_admin`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `capteur->données` FOREIGN KEY (`id_capteur`) REFERENCES `capteur` (`id_capteur`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
