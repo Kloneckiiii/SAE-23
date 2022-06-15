@@ -3,17 +3,18 @@
 broker="localhost"
 #user="student"
 #pass="student"
-declare -a salles=("E201" "E202" "E101" "E102")
+declare -a salles=("E101" "E102" "E201" "E202")
 tailleSalles=$(echo ${#salles[@]})
-declare -a topics=(
+declare -a topics=( 
+"sae/bate1/E101/temperature"  
+"sae/bate1/E101/luminosite"
+"sae/bate1/E102/temperature"  
+"sae/bate1/E102/luminosite"
+"sae/bate2/E201/temperature"  
+"sae/bate2/E201/luminosite"
 "sae/bate2/E202/temperature" 
 "sae/bate2/E202/luminosite" 
-"sae/bate2/E201/temperature"  
-"sae/bate2/E201/luminosite" 
-"sae/bate1/E101/temperature"  
-"sae/bate2/E101/luminosite"
-"sae/bate1/E102/temperature"  
-"sae/bate1/E102/luminosite")
+)
 tailleTopics=$(echo ${#topics[@]})
 declare -A valTemp
 declare -A valLum
