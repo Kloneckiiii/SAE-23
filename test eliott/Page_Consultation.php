@@ -35,19 +35,39 @@ $conn = mysqli_connect($servername, $username, $password, $dbname);
       //-------------------------Boucle pour l'affichage des salles
 
       for ($j = 0; $j <= $nb_salle-1;$j++) {
-        /*
-        $query = "SELECT `id_mesure`, `date/heure` FROM `mesure`
-        LIMIT 1
-        INNER JOIN capteur ON `mesure.id_capteur` = `capteur.id_capteur`
-        WHERE `capteur.salle` = `$tab_salle[$j]`
-        ORDER BY `mesure.id_mesure` DESC";
-        $temp_result = mysqli_query($conn, $query);
-        echo $temp_result;
-        */
+        
+        //----------------------recuperation de la derniere valeur de la temperature
+        $query_temp = "SELECT `mesure`.`valeur`, `mesure`.`date/heure`
+        FROM `mesure` 
+          LEFT JOIN `capteur` ON `mesure`.`id_capteur` = `capteur`.`id_capteur`
+        WHERE `capteur`.`salle` = '$tab_salle[$j]' AND `capteur`.`type` = 'temperature'
+        ORDER BY `mesure`.`id_mesure` DESC
+        LIMIT 1";
+        $temp_result = mysqli_query($conn, $query_temp);
+        while($row = mysqli_fetch_assoc($temp_result)) {
+          $temperature_value[$j] = $row["valeur"];
+          $temperature_date[$j] = $row["date/heure"];
+          $x++;
+        }
 
-        echo "<p>$tab_salle[$j]<p>";
+        //---------------------------recuperation de la derniere valeur de la temperature
+        $query_lum = "SELECT `mesure`.`valeur`, `mesure`.`date/heure`
+        FROM `mesure` 
+          LEFT JOIN `capteur` ON `mesure`.`id_capteur` = `capteur`.`id_capteur`
+        WHERE `capteur`.`salle` = '$tab_salle[$j]' AND `capteur`.`type` = 'luminosite'
+        ORDER BY `mesure`.`id_mesure` DESC
+        LIMIT 1";
+        $lum_result = mysqli_query($conn, $query_lum);
+        while($row = mysqli_fetch_assoc($lum_result)) {
+          $luminosite_value[$j] = $row["valeur"];
+          $luminosite_date[$j] = $row["date/heure"];
+          $x++;
+        }
+
+
+        echo "<h3>$tab_salle[$j]</h3>";
         echo "<table border=\"5\" bordercolor=\"black\"><tr><th>temperature</th><th>luminosite</th></tr>";
-        echo "<tr><td>5 à 18h00</td><td>8</td></tr></table>";
+        echo "<tr><td>$temperature_value[$j]° à $temperature_date[$j]</td><td>$luminosite_value[$j] lum à $luminosite_date[$j]</td></tr></table>";
 
         
 
