@@ -22,6 +22,7 @@
                 <li><a href="login_gest.php">Gestionnaires</a></li>
             </ul>
         </nav>
+        <h2>Affichage d'une donnée par salle</h2>
 <?php
 
     //---------------------database connection---------------------
