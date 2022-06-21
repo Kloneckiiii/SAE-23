@@ -17,42 +17,42 @@
                 <li><a href="problèmes.html">Problèmes rencontrés </a></li>
                 <li><a href="gantt.html"> GANTT </a></li>
                 <li><a href="mentions_legales.html"> Mentions légales </a> </li>
-                <li><a href="page_consultation.html"> consultation des données </a> </li>
-                <li><a href="connexion.html"> se connecter </a> </li>
+                <li><a href="Page_Consultation.php"> Consultation des donnnees </a></li>
+                <li><a href="login_admin.php">Admin</a></li>
+                <li><a href="login_gest.php">Gestionnaires</a></li>
             </ul>
         </nav>
 <?php
 
-    //---------------------connexion a la base de donnee---------------------
+    //---------------------database connection---------------------
     $servername = "localhost";
     $username = "eliott";
     $password = "bonjour";
     $dbname = "bd_sae23";
     // Create connection
-    $conn = mysqli_connect($servername, $username, $password, $dbname);
+    $conn = mysqli_connect($servername, $username, $password, $dbname); //connection to the database
     // Check connection
     if (!$conn) {
         die("Connection failed: " . mysqli_connect_error());
     }
     else {
         //echo "connexion reussi";
-        echo "<br>";
     }
 ?>
-
-<form method="POST" action="Page_Affichage.php"/>
+<!--creation of the form for room and time slot selection -->
+<form method="POST" action="Page_Affichage.php"> 
 
 <?php
-    //----------------------Recuperation de la salle par gestionnaire-------------
+    //----------------------Recovery of the room by manager-------------
     $query_salle = "SELECT DISTINCT `capteur`.`salle`
         FROM `capteur`
         INNER JOIN `batiment` ON `batiment`.`id_bat` = `capteur`.`batiment`
-        WHERE `batiment`.`id_bat` = '1'"; //requete pour récupérer les salles sur la base de donnée en fonction du gestionnaire connecter
-    $result_salle = mysqli_query($conn, $query_salle); //execution de la requete sql vers la base de donnée
-    $nb_salle = mysqli_num_rows($result_salle); //variable avec le nombre de salle
-    for ($i = 0; $i <= $nb_salle-1; $i++){ //boucle pour crée autant de rubrique qu'il n'y  a de salle
+        WHERE `batiment`.`id_bat` = '1'"; //query to retrieve rooms from the database according to the connected manager
+    $result_salle = mysqli_query($conn, $query_salle); //execution of the sql query to the database
+    $nb_salle = mysqli_num_rows($result_salle); //variable with the number of rooms
+    for ($i = 0; $i <= $nb_salle-1; $i++){ //loop to create as many sections as there are rooms
         $j = 0;
-        while($row = mysqli_fetch_array($result_salle)) {
+        while($row = mysqli_fetch_array($result_salle)) { //display of the form according to the rooms
             $salle[$i] = $row[0];
             echo "<fieldset><legend>$salle[$i]</legend>
                     <label for='date$j'>Le </label>
@@ -60,12 +60,12 @@
                     <label for='heure1_$j'>entre </label>
                     <input type='time' name='heure1_$j'/>
                     <label for='heure2_$j'>et </label>
-                    <input type='time' name='heure2_$j'/></fieldset>"; //génération du formulaires en fonction du gestionnaire et du nombre de salle
+                    <input type='time' name='heure2_$j'/></fieldset>"; //generation of the forms according to the manager and the number of rooms
             $j++;
         }
     }
 ?>
-<input type="submit" name="submit" value="Valider" />
+<input type="submit" name="submit" value="Valider" /> <!--button to send to the data display page -->
 </form>
 </body>
 </html>

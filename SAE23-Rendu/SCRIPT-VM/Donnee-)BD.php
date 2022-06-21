@@ -1,14 +1,14 @@
 #!/opt/lampp/bin/php
 <?php
 
-//---------------------connexion a la base de donnee---------------------
+//---------------------connection to the database---------------------
 $servername = "localhost";
 $username = "eliott";
 $password = "bonjour";
 $dbname = "bd_sae23";
 
 // Create connection
-$conn = mysqli_connect($servername, $username, $password, $dbname);
+$conn = mysqli_connect($servername, $username, $password, $dbname); //connexion a la base de donnee
 // Check connection
 if (!$conn) {
   die("Connection failed: " . mysqli_connect_error());
@@ -19,9 +19,9 @@ else {
 }
 
 
-//-----------------creation du tableau avec les salles et leurs ID----------------
-$salle_query = mysqli_query($conn, "SELECT id_capteur FROM capteur"); //requete pour recupérer les id capteurs de la table capteur
-$nb_salle = mysqli_num_rows($salle_query); //execution de la requete
+//-----------------creation of the table with the rooms and their ID----------------
+$salle_query = mysqli_query($conn, "SELECT id_capteur FROM capteur"); //query to retrieve sensor ids from the sensor table
+$nb_salle = mysqli_num_rows($salle_query); //execution of the query
 $tab = array();
 for ($j = 1; $j <= $nb_salle; $j++) {
   $k=$j-1;
@@ -29,23 +29,23 @@ for ($j = 1; $j <= $nb_salle; $j++) {
 
 
 
-  $bate_query = mysqli_query($conn, "SELECT batiment FROM capteur LIMIT 1 OFFSET $k"); //requete pour récupérer batiement de la table capteur
-  $batiment = mysqli_fetch_array($bate_query); //execution de la requete
+  $bate_query = mysqli_query($conn, "SELECT batiment FROM capteur LIMIT 1 OFFSET $k"); //query to retrieve building from sensor table
+  $batiment = mysqli_fetch_array($bate_query); //execution of the query
   foreach($batiment as $bate){}
-  $tab[$j][2]=$bate;  //numéro du batiment
+  $tab[$j][2]=$bate;  //building number
 
 
-  $capteur_query = mysqli_query($conn, "SELECT type FROM capteur LIMIT 1 OFFSET $k"); //requete pour récupérer batiement de la table capteur
-  $capteurs = mysqli_fetch_array($capteur_query); //execution de la requete
+  $capteur_query = mysqli_query($conn, "SELECT type FROM capteur LIMIT 1 OFFSET $k"); //query to retrieve the type of the sensor table
+  $capteurs = mysqli_fetch_array($capteur_query); //execution of the query
   foreach($capteurs as $capteur){}
-  $tab[$j][3]=$capteur; //type de capteur
+  $tab[$j][3]=$capteur; //sensor type
   //echo $tab[$j][3];
   //echo "<br/>";
 
-  $salle_query = mysqli_query($conn, "SELECT salle FROM capteur LIMIT 1 OFFSET $k"); //requete pour récupérer batiement de la table capteur
-  $num_salles = mysqli_fetch_array($salle_query); //execution de la requete
+  $salle_query = mysqli_query($conn, "SELECT salle FROM capteur LIMIT 1 OFFSET $k"); //query to retrieve building the sensor table
+  $num_salles = mysqli_fetch_array($salle_query); //execution of the query
   foreach($num_salles as $num_salle){}
-  $tab[$j][4]=$num_salle; //salle
+  $tab[$j][4]=$num_salle; //room
   //echo $tab[$j][4];
   //echo "<br/>";
 
@@ -61,15 +61,15 @@ for ($j = 1; $j <= $nb_salle; $j++) {
 }
 
 
-//-------------publication des donnees sur la BD----------------
+//-------------publication of data on the database----------------
 
 for ($i = 1; $i <= $nb_salle; $i++){
   $topic = $tab[$i][5];
   $id_capteur = $tab[$i][1];
-  $value = `mosquitto_sub -h localhost -t $topic -C 1`; //récupération de la donnée sur le serveur MQTT
+  $value = `mosquitto_sub -h localhost -t $topic -C 1`; //retrieve the data from the MQTT server
   echo $value;
-  $sql = "INSERT INTO mesure (id_capteur, valeur) VALUES ( $id_capteur , $value )" //requete pour envoyer la donnée sur la base de donnée
-  if (mysqli_query($conn, $sql)) { //vérification si la donnée a bien été envoyé
+  $sql = "INSERT INTO mesure (id_capteur, valeur) VALUES ( $id_capteur , $value )" //request to send the data to the database
+  if (mysqli_query($conn, $sql)) { //check if the data has been sent
     echo "Mesure ajoutée";
     } 
   else {

@@ -2,10 +2,10 @@
 -- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Hôte : localhost
--- Généré le : mer. 15 juin 2022 à 20:13
+-- Hôte : 127.0.0.1
+-- Généré le : mar. 21 juin 2022 à 14:57
 -- Version du serveur : 10.4.24-MariaDB
--- Version de PHP : 7.4.29
+-- Version de PHP : 8.1.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données : `sae23`
+-- Base de données : `bd_sae23`
 --
 
 -- --------------------------------------------------------
@@ -29,9 +29,16 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `administration` (
   `id_admin` int(11) NOT NULL,
-  `lgin` text NOT NULL,
+  `login2` text NOT NULL,
   `mot_de_passe` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Déchargement des données de la table `administration`
+--
+
+INSERT INTO `administration` (`id_admin`, `login2`, `mot_de_passe`) VALUES
+(1, 'user', 'passroot');
 
 -- --------------------------------------------------------
 
@@ -42,7 +49,7 @@ CREATE TABLE `administration` (
 CREATE TABLE `batiment` (
   `id_bat` int(11) NOT NULL,
   `Nom` text NOT NULL,
-  `login` text NOT NULL,
+  `login2` text NOT NULL,
   `mdp` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -50,7 +57,7 @@ CREATE TABLE `batiment` (
 -- Déchargement des données de la table `batiment`
 --
 
-INSERT INTO `batiment` (`id_bat`, `Nom`, `login`, `mdp`) VALUES
+INSERT INTO `batiment` (`id_bat`, `Nom`, `login2`, `mdp`) VALUES
 (1, 'bate1', 'eliott', 12345),
 (2, 'bate2', 'eliott', 12345);
 
@@ -140,7 +147,9 @@ INSERT INTO `mesure` (`id_mesure`, `date/heure`, `id_capteur`, `valeur`) VALUES
 (63, '2022-06-15 18:07:50', 5, 24),
 (64, '2022-06-15 18:07:55', 6, 67),
 (65, '2022-06-15 18:08:00', 7, 25),
-(66, '2022-06-15 18:08:05', 8, 80);
+(66, '2022-06-15 18:08:05', 8, 80),
+(67, '2022-06-18 09:48:56', 2, 23),
+(68, '2022-06-18 09:55:30', 3, 54);
 
 --
 -- Index pour les tables déchargées
@@ -180,13 +189,13 @@ ALTER TABLE `mesure`
 -- AUTO_INCREMENT pour la table `administration`
 --
 ALTER TABLE `administration`
-  MODIFY `id_admin` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_admin` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT pour la table `batiment`
 --
 ALTER TABLE `batiment`
-  MODIFY `id_bat` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_bat` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT pour la table `capteur`
@@ -198,7 +207,7 @@ ALTER TABLE `capteur`
 -- AUTO_INCREMENT pour la table `mesure`
 --
 ALTER TABLE `mesure`
-  MODIFY `id_mesure` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
+  MODIFY `id_mesure` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
 
 --
 -- Contraintes pour les tables déchargées
